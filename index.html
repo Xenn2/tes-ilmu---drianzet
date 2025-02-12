@@ -1,9 +1,157 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Website Saya</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tebak Kosakata - Tema Kucing 🐱</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bangers&display=swap">
+    <style>
+        /* Background */
+        body { 
+            font-family: 'Bangers', cursive;
+            text-align: center;
+            background: url('https://i.postimg.cc/BZrhgp7y/b888b163e0277f3b0552077ef976e416.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* Kontainer papan pertanyaan */
+        .container {
+            background: rgba(245, 214, 163, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 90%;
+            margin: auto;
+            border: 6px solid #d69c50;
+            position: relative;
+            margin-top: 50px;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #7a4a26;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 15px;
+        }
+
+        /* Kotak pertanyaan */
+        .question-box {
+            background: #d69c50;
+            color: white;
+            padding: 18px;
+            border-radius: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            border: 5px solid #8b5e3c;
+            margin-bottom: 20px;
+        }
+
+        /* Input jawaban */
+        input {
+            padding: 12px;
+            font-size: 16px;
+            width: 85%;
+            text-align: center;
+            border-radius: 10px;
+            border: 3px solid #8b5e3c;
+            background: #fff3e0;
+        }
+
+        /* Tombol */
+        .btn {
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 50px;
+            margin-top: 10px;
+            font-weight: bold;
+            background: #ff9800;
+            color: white;
+            border: 3px solid #e67e22;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #e67e22;
+            transform: scale(1.1);
+        }
+
+        #hasil {
+            font-size: 22px;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #7a4a26;
+        }
+
+        #skor {
+            font-size: 18px;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #7a4a26;
+        }
+    </style>
 </head>
 <body>
-    <h1>Halo, ini halaman utama!</h1>
+
+    <!-- Suara -->
+    <audio id="meowSound" src="https://www.fesliyanstudios.com/play-mp3/4389"></audio>
+    <audio id="correctSound" src="https://www.fesliyanstudios.com/play-mp3/4383"></audio>
+    <audio id="wrongSound" src="https://www.fesliyanstudios.com/play-mp3/4379"></audio>
+
+    <div class="container">
+        <h1>🐱 Tebak Kosakata Kucing! 🐱</h1>
+        <div class="question-box" id="pertanyaan">Apa bahasa Inggris dari 'Kucing'?</div>
+        <input type="text" id="jawaban" placeholder="Masukkan jawaban..." autocomplete="off">
+        <br>
+        <button class="btn" onclick="cekJawaban()">Cek Jawaban</button>
+        <div id="hasil"></div>
+        <div id="skor">Skor: <span id="nilai">0</span></div>
+    </div>
+
+    <script>
+        let skor = 0;
+        let pertanyaanIndex = 0;
+
+        const soal = [
+            { pertanyaan: "Apa bahasa Inggris dari 'Kucing'?", jawaban: "Cat" },
+            { pertanyaan: "Apa bahasa Korea dari 'Kucing'?", jawaban: "Goyangi" },
+            { pertanyaan: "Apa bahasa Jepang dari 'Kucing'?", jawaban: "Neko" },
+            { pertanyaan: "Apa bahasa Prancis dari 'Kucing'?", jawaban: "Chat" }
+        ];
+
+        function cekJawaban() {
+            let inputJawaban = document.getElementById("jawaban").value.trim();
+            let hasil = document.getElementById("hasil");
+            let meowSound = document.getElementById("meowSound");
+            let correctSound = document.getElementById("correctSound");
+            let wrongSound = document.getElementById("wrongSound");
+
+            meowSound.play(); // Suara saat klik tombol
+
+            if (inputJawaban.toLowerCase() === soal[pertanyaanIndex].jawaban.toLowerCase()) {
+                skor += 10;
+                document.getElementById("nilai").innerText = skor;
+                hasil.innerHTML = "✅ Benar! Lanjut ke pertanyaan berikutnya...";
+                
+                correctSound.play(); // Suara jika jawaban benar
+
+                setTimeout(() => {
+                    pertanyaanIndex++;
+                    if (pertanyaanIndex < soal.length) {
+                        document.getElementById("pertanyaan").innerText = soal[pertanyaanIndex].pertanyaan;
+                        document.getElementById("jawaban").value = "";
+                        hasil.innerHTML = "";
+                    } else {
+                        hasil.innerHTML = "🎉 Selamat! Kamu sudah menjawab semua pertanyaan!";
+                    }
+                }, 1000);
+            } else {
+                hasil.innerHTML = "❌ Jawaban salah! Coba lagi.";
+                wrongSound.play(); // Suara jika jawaban salah
+            }
+        }
+    </script>
+
 </body>
 </html>
